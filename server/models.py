@@ -14,6 +14,13 @@ class User(db.Model, SerializerMixin):
     tbr_books = db.relationship('TBR', back_populates='user', cascade='all, delete-orphan')
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')
 
+    def __repr__(self): 
+        return f"""
+            username: {self.username}
+            email: {self.email}
+            password: {self.password}
+        """
+
 class Book(db.Model, SerializerMixin):
     __tablename__ = 'books'
     

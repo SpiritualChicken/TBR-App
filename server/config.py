@@ -10,6 +10,7 @@ from sqlalchemy import MetaData
 
 # Local imports
 
+
 # Instantiate app, set attributes
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -21,6 +22,7 @@ metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 })
 db = SQLAlchemy(metadata=metadata)
+from models import User, Book, Review, TBR
 migrate = Migrate(app, db)
 db.init_app(app)
 
