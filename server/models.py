@@ -20,6 +20,21 @@ class User(db.Model, SerializerMixin):
             'username': self.username,
             'email': self.email
         }
+    
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
 class Book(db.Model, SerializerMixin):
     __tablename__ = 'books'
