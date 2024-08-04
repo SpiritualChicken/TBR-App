@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
     const [books, setBooks] = useState([]);
@@ -6,6 +7,8 @@ const Home = () => {
     const [author, setAuthor] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const history = useHistory();
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -24,8 +27,23 @@ const Home = () => {
             }
         };
 
+        const fetchCurrentUser = async () => {
+            try {
+                const response = await fetch('/current_user');
+                if (response.ok) {
+                    const data = await response.json();
+                    setCurrentUser(data);
+                } else {
+                    history.push('/login'); // Redirect to login if no user is logged in
+                }
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+
         fetchBooks();
-    }, []);
+        fetchCurrentUser();
+    }, [history]);
 
     const handleAddBook = async (e) => {
         e.preventDefault();
@@ -50,6 +68,25 @@ const Home = () => {
         }
     };
 
+    const handleAddToTBR = async (bookId) => {
+        try {
+            const response = await fetch(`/users/${currentUser.id}/tbr`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ book_id: bookId })
+            });
+            if (response.ok) {
+                alert('Book added to your TBR');
+            } else {
+                throw new Error('Failed to add book to TBR');
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -58,7 +95,12 @@ const Home = () => {
             <h1>All Books</h1>
             <ul>
                 {books.map(book => (
-                    <li key={book.id}>{book.title} by {book.author}</li>
+                    <li key={book.id}>
+                        {book.title} by {book.author}
+                        {currentUser && (
+                            <button onClick={() => handleAddToTBR(book.id)}>Add to TBR</button>
+                        )}
+                    </li>
                 ))}
             </ul>
             <h2>Add a New Book</h2>

@@ -51,7 +51,7 @@ const BookIndex = () => {
             {tbr.length > 0 ? (
                 <ul>
                     {tbr.map(book => (
-                        <li key={book.id}>{book.title}</li>
+                        <li key={book.id}>Title: {book.book_title} </li>
                     ))}
                 </ul>
             ) : (
