@@ -80,6 +80,15 @@ def user_tbr_by_id(id):
         db.session.add(tbr)
         db.session.commit()
         return make_response(tbr.serialize(), 201)
+    
+@app.route("/users/<int:user_id>/tbr/<int:tbr_id>", methods=['DELETE'])
+def remove_from_tbr(user_id, tbr_id):
+    tbr = TBR.query.filter_by(id=tbr_id, user_id=user_id).first()
+    if not tbr:
+        return make_response({"message": "No TBR entry found!"}, 404)
+    db.session.delete(tbr)
+    db.session.commit()
+    return make_response({"message": "TBR entry deleted successfully!"}, 200)
 
 @app.route("/users/<int:id>/reviews", methods=['GET', 'POST'])
 def user_reviews_by_id(id):

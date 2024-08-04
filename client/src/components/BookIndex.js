@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const BookIndex = () => {
+    const [currentUser, setCurrentUser] = useState(null);
     const [tbr, setTBR] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,11 +14,12 @@ const BookIndex = () => {
             try {
                 const responseUser = await fetch('/current_user');
                 if (responseUser.ok) {
-                    const currentUser = await responseUser.json();
+                    const user = await responseUser.json();
+                    setCurrentUser(user);
 
                     const [tbrResponse, reviewsResponse] = await Promise.all([
-                        fetch(`/users/${currentUser.id}/tbr`),
-                        fetch(`/users/${currentUser.id}/reviews`)
+                        fetch(`/users/${user.id}/tbr`),
+                        fetch(`/users/${user.id}/reviews`)
                     ]);
 
                     if (tbrResponse.ok && reviewsResponse.ok) {
@@ -41,6 +43,24 @@ const BookIndex = () => {
         fetchData();
     }, [history]);
 
+    const handleDelete = async (tbrId) => {
+        try {
+            const response = await fetch(`/users/${currentUser.id}/tbr/${tbrId}`, { method: 'DELETE' });
+            if (response.ok) {
+                setTBR(tbr.filter(book => book.id !== tbrId));
+            } else {
+                throw new Error('Failed to delete book from TBR');
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const handleReview = (bookId) => {
+        // Navigate to a review page or show a review form
+        history.push(`/review/${bookId}`);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -51,7 +71,11 @@ const BookIndex = () => {
             {tbr.length > 0 ? (
                 <ul>
                     {tbr.map(book => (
-                        <li key={book.id}>Title: {book.book_title} </li>
+                        <li key={book.id}>
+                            Title: {book.book_title}
+                            <button onClick={() => handleDelete(book.id)}>Delete</button>
+                            <button onClick={() => handleReview(book.id)}>Review</button>
+                        </li>
                     ))}
                 </ul>
             ) : (
