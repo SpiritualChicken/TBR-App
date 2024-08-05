@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, make_response, jsonify
+from flask import request, make_response, jsonify, session
 from flask_restful import Resource
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -33,14 +33,18 @@ def all_users():
         return make_response(jsonify(user_list), 200)
     elif request.method == 'POST':
         data = request.get_json()
-        user = User(
-            username=data['username'],
-            email=data['email'],
-            password=bcrypt.generate_password_hash(data['password']).decode('utf-8')
-        )
-        db.session.add(user)
-        db.session.commit()
-        return make_response(user.serialize(), 201)
+        try:
+            user = User(
+                username=data['username'],
+                email=data['email'],
+                password=bcrypt.generate_password_hash(data['password']).decode('utf-8')
+            )
+            db.session.add(user)
+            db.session.commit()
+            return make_response(user.serialize(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to create user', 'error': str(e)}, 400)
 
 @app.route('/users/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
 def user_by_id(id):
@@ -54,15 +58,23 @@ def user_by_id(id):
         data = request.get_json()
         for key, value in data.items():
             setattr(user, key, value)
-        db.session.add(user)
-        db.session.commit()
-        return make_response(user.serialize(), 200)
+        try:
+            db.session.commit()
+            return make_response(user.serialize(), 200)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to update user', 'error': str(e)}, 400)
     elif request.method == 'DELETE':
-        db.session.delete(user)
-        db.session.commit()
-        return make_response({'message': f"Successfully deleted user with id of {user.id}"}, 200)
+        try:
+            db.session.delete(user)
+            db.session.commit()
+            return make_response({'message': f"Successfully deleted user with id of {user.id}"}, 200)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to delete user', 'error': str(e)}, 400)
 
 @app.route("/users/<int:id>/tbr", methods=['GET', 'POST'])
+@login_required
 def user_tbr_by_id(id):
     user = User.query.filter(User.id == id).first()
     if not user:
@@ -73,24 +85,34 @@ def user_tbr_by_id(id):
         return make_response(jsonify(tbr_books), 200)
     elif request.method == 'POST':
         data = request.get_json()
-        tbr = TBR(
-            user_id=id,
-            book_id=data['book_id']
-        )
-        db.session.add(tbr)
-        db.session.commit()
-        return make_response(tbr.serialize(), 201)
+        try:
+            tbr = TBR(
+                user_id=id,
+                book_id=data['book_id']
+            )
+            db.session.add(tbr)
+            db.session.commit()
+            return make_response(tbr.serialize(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to add book to TBR', 'error': str(e)}, 400)
     
 @app.route("/users/<int:user_id>/tbr/<int:tbr_id>", methods=['DELETE'])
+@login_required
 def remove_from_tbr(user_id, tbr_id):
     tbr = TBR.query.filter_by(id=tbr_id, user_id=user_id).first()
     if not tbr:
         return make_response({"message": "No TBR entry found!"}, 404)
-    db.session.delete(tbr)
-    db.session.commit()
-    return make_response({"message": "TBR entry deleted successfully!"}, 200)
+    try:
+        db.session.delete(tbr)
+        db.session.commit()
+        return make_response({"message": "TBR entry deleted successfully!"}, 200)
+    except Exception as e:
+        db.session.rollback()
+        return make_response({'message': 'Failed to delete TBR entry', 'error': str(e)}, 400)
 
 @app.route("/users/<int:id>/reviews", methods=['GET', 'POST'])
+@login_required
 def user_reviews_by_id(id):
     user = User.query.filter(User.id == id).first()
     if not user:
@@ -101,16 +123,19 @@ def user_reviews_by_id(id):
         return make_response(jsonify(reviews), 200)
     elif request.method == 'POST':
         data = request.get_json()
-        review = Review(
-            user_id=id,
-            book_id=data['book_id'],
-            rating=data['rating'],
-            review_text=data.get('review_text', '')
-        )
-        db.session.add(review)
-        db.session.commit()
-        return make_response(review.serialize(), 201)
-
+        try:
+            review = Review(
+                user_id=id,
+                book_id=data['book_id'],
+                rating=data['rating'],
+                review_text=data.get('review_text', '')
+            )
+            db.session.add(review)
+            db.session.commit()
+            return make_response(review.serialize(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to add review', 'error': str(e)}, 400)
 
 @app.route('/books', methods=['GET', 'POST'])
 def all_books():
@@ -120,13 +145,17 @@ def all_books():
         return make_response(jsonify(book_list), 200)
     elif request.method == 'POST':
         data = request.get_json()
-        new_book = Book(
-            title=data['title'],
-            author=data['author']
-        )
-        db.session.add(new_book)
-        db.session.commit()
-        return make_response(new_book.serialize(), 201)
+        try:
+            new_book = Book(
+                title=data['title'],
+                author=data['author']
+            )
+            db.session.add(new_book)
+            db.session.commit()
+            return make_response(new_book.serialize(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to create book', 'error': str(e)}, 400)
 
 @app.route('/reviews', methods=['GET'])
 def all_reviews():
@@ -145,6 +174,7 @@ def signup():
         login_user(new_user)
         return make_response(new_user.serialize(), 201)
     except Exception as e:
+        db.session.rollback()
         return make_response({'message': 'Signup failed', 'error': str(e)}, 500)
 
 @app.route('/login', methods=['POST'])

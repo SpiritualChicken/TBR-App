@@ -31,10 +31,11 @@ const BookIndex = () => {
                         throw new Error('Failed to fetch data');
                     }
                 } else {
-                    history.push('/login'); // Redirect to login if no user is logged in
+                    throw new Error('No user logged in');
                 }
             } catch (err) {
                 setError(err.message);
+                history.push('/login');
             } finally {
                 setLoading(false);
             }
@@ -57,7 +58,6 @@ const BookIndex = () => {
     };
 
     const handleReview = (bookId) => {
-        // Navigate to a review page or show a review form
         history.push(`/review/${bookId}`);
     };
 
@@ -74,7 +74,7 @@ const BookIndex = () => {
                         <li key={book.id}>
                             Title: {book.book_title}
                             <button onClick={() => handleDelete(book.id)}>Delete</button>
-                            <button onClick={() => handleReview(book.id)}>Review</button>
+                            <button onClick={() => handleReview(book.book_id)}>Review</button>
                         </li>
                     ))}
                 </ul>

@@ -6,6 +6,7 @@ import Login from './Login';
 import Signup from './Signup';
 import BookIndex from './BookIndex';
 import Home from './Home';
+import ReviewForm from './ReviewForm';
 
 const App = () => {
     return (
@@ -16,6 +17,7 @@ const App = () => {
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={Signup} />
                     <Route path="/BookIndex" component={BookIndex} />
+                    <Route path="/review/:bookId" component={ReviewForm} />
                     <Route path="/" component={Home} />
                     {/* Add more routes here */}
                 </Switch>
