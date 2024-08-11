@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import '../index.css'; // Import the CSS file
 
 const Home = () => {
     const [books, setBooks] = useState([]);
@@ -93,16 +94,6 @@ const Home = () => {
     return (
         <div>
             <h1>All Books</h1>
-            <ul>
-                {books.map(book => (
-                    <li key={book.id}>
-                        {book.title} by {book.author}
-                        {currentUser && (
-                            <button onClick={() => handleAddToTBR(book.id)}>Add to TBR</button>
-                        )}
-                    </li>
-                ))}
-            </ul>
             <h2>Add a New Book</h2>
             <form onSubmit={handleAddBook}>
                 <label>
@@ -127,6 +118,20 @@ const Home = () => {
                 <br />
                 <button type="submit">Add Book</button>
             </form>
+            <ul className="book-list">
+                {books.map(book => (
+                    <li key={book.id} className="book-card">
+                        <div className="book-details">
+                            <h3>{book.title}</h3>
+                            <p>by {book.author}</p>
+                        </div>
+                {currentUser && (
+                    <button className="tbr-button" onClick={() => handleAddToTBR(book.id)}>Add to TBR</button>
+                )}
+            </li >
+        ))}
+        </ul>
+            
         </div>
     );
 };

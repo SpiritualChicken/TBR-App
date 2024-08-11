@@ -5,3 +5,119 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
+.navbar {
+  background-color: #555; /* Dark background */
+  border-radius: 0.5rem;
+  padding: 10px 20px; /* Padding around the content */
+  display: flex;
+  justify-content: space-between; /* Space between nav links and user section */
+  align-items: center; /* Center items vertically */
+}
+
+.navhomeitems{
+  display: flex;
+  align-items: center;
+}
+
+/* Links in the navbar */
+.nav-link {
+  color: white; /* White text color */
+  text-decoration: none; /* Remove underline */
+  margin-right: 15px; /* Space between links */
+  font-size: 16px; /* Font size */
+}
+
+.nav-link:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* User section (Welcome message and Logout button) */
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Welcome message styling */
+.welcome-message {
+  color: #fff; /* Gold color */
+  margin-right: 10px; /* Space between message and button */
+  font-size: 16px; /* Font size */
+}
+
+/* Logout button styling */
+.logout-button {
+  background-color: #ff4d4d; /* Red background */
+  border-radius: 0.5rem;
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  padding: 5px 10px; /* Padding inside the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+}
+
+.logout-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+/* Auth links container (Login and Signup) */
+.auth-links {
+  display: flex;
+  gap: 15px; /* Space between login and signup links */
+}
+
+/* Container for the book list */
+.book-list {
+  list-style-type: none; /* Remove default list style */
+  padding: 0; /* Remove default padding */
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap to the next line */
+  gap: 20px; /* Space between cards */
+}
+
+/* Each book card */
+.book-card {
+  background-color: #f9f9f9; /* Light background color for the card */
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 20px; /* Padding inside the card */
+  width: 200px; /* Set a fixed width for each card */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+/* Styling for the book details (title and author) */
+.book-details {
+  margin-bottom: 15px; /* Space between the details and the button */
+  text-align: center; /* Center text inside the card */
+}
+
+.book-details h3 {
+  font-size: 18px; /* Font size for the title */
+  margin: 0 0 10px 0; /* Margin below the title */
+  color: #333; /* Darker color for the title */
+}
+
+.book-details p {
+  font-size: 14px; /* Font size for the author */
+  margin: 0; /* Remove margin */
+  color: #777; /* Lighter color for the author */
+}
+
+/* "Add to TBR" button styling */
+.tbr-button {
+  background-color: #3872c8; /* Green background */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 15px; /* Padding inside the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 14px; /* Font size */
+  width: 100%; /* Button takes the full width of the card */
+  text-align: center; /* Center text in the button */
+}
+
+.tbr-button:hover {
+  background-color: #324ab5 ; /* Darker green on hover */
+}
