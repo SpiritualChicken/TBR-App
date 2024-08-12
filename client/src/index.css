@@ -87,6 +87,18 @@
   align-items: center; /* Center content horizontally */
 }
 
+.review-card {
+  background-color: #f9f9f9; /* Light background color for the card */
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 20px; /* Padding inside the card */
+  width: 200px; /* Set a fixed width for each card */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center content horizontally */
+}
+
 /* Styling for the book details (title and author) */
 .book-details {
   margin-bottom: 15px; /* Space between the details and the button */

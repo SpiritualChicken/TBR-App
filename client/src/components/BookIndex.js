@@ -91,13 +91,13 @@ const BookIndex = () => {
             )}
             <h2>Reviews</h2>
             {reviews.length > 0 ? (
-                <ul>
+                <ul className='book-list'>
                     {reviews.map(review => (
                         <li key={review.id} className="review-card">
                             <p>{review.book_title}</p>
                             <p>{review.rating} stars</p>
                             <p>{review.review_text}</p>
-                            <button className="edit-button" onClick={() => handleEdit(review.id)}>Edit</button>
+                            <button className="tbr-button" onClick={() => handleEdit(review.id)}>Edit</button>
                         </li>
                     ))}
                 </ul>
