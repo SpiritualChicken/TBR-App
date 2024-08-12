@@ -94,30 +94,32 @@ const Home = () => {
     return (
         <div>
             <h1>All Books</h1>
-            <h2>Add a New Book</h2>
-            <form onSubmit={handleAddBook}>
-                <label>
-                    Title:
-                    <input 
-                        type="text" 
-                        value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
-                        required 
-                    />
-                </label>
-                <br />
-                <label>
-                    Author:
-                    <input 
-                        type="text" 
-                        value={author} 
-                        onChange={(e) => setAuthor(e.target.value)} 
-                        required 
-                    />
-                </label>
-                <br />
-                <button type="submit">Add Book</button>
-            </form>
+            <div className="addbook">
+                <h2>Add a New Book</h2>
+                <form onSubmit={handleAddBook}>
+                    <div className="form-group">
+                        <label htmlFor="title">Title:</label>
+                        <input 
+                            type="text" 
+                            id="title"
+                            value={title} 
+                            onChange={(e) => setTitle(e.target.value)} 
+                            required 
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="author">Author:</label>
+                        <input 
+                            type="text" 
+                            id="author"
+                            value={author} 
+                            onChange={(e) => setAuthor(e.target.value)} 
+                            required 
+                        />
+                    </div>
+                    <button type="submit" className="submit-button">Add Book</button>
+                </form>
+            </div>
             <ul className="book-list">
                 {books.map(book => (
                     <li key={book.id} className="book-card">

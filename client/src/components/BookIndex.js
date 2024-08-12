@@ -94,7 +94,7 @@ const BookIndex = () => {
                 <ul className='book-list'>
                     {reviews.map(review => (
                         <li key={review.id} className="review-card">
-                            <p>{review.book_title}</p>
+                            <h3>{review.book_title}</h3>
                             <p>{review.rating} stars</p>
                             <p>{review.review_text}</p>
                             <button className="tbr-button" onClick={() => handleEdit(review.id)}>Edit</button>
