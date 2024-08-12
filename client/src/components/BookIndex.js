@@ -61,6 +61,10 @@ const BookIndex = () => {
         history.push(`/review/${bookId}`);
     };
 
+    const handleEdit = (reviewId) => {
+        history.push(`/edit-review/${reviewId}`);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -69,30 +73,31 @@ const BookIndex = () => {
             <h1>Your Books</h1>
             <h2>To Be Read</h2>
             {tbr.length > 0 ? (
-            <ul className="book-list">
-                {tbr.map(book => (
-                    <li key={book.id} className="book-card">
-                        <div className="book-details">
-                            <h3>Title: {book.book_title}</h3>
-                        </div>
-                        <div className="button-group">
-                            <button className="tbr-button" onClick={() => handleDelete(book.id)}>Delete</button>
-                            <button className="tbr-button" onClick={() => handleReview(book.book_id)}>Review</button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        ) : (
-            <p>TBR currently empty</p>
-        )}
+                <ul className="book-list">
+                    {tbr.map(book => (
+                        <li key={book.id} className="book-card">
+                            <div className="book-details">
+                                <h3>Title: {book.book_title}</h3>
+                            </div>
+                            <div className="button-group">
+                                <button className="tbr-button" onClick={() => handleDelete(book.id)}>Delete</button>
+                                <button className="tbr-button" onClick={() => handleReview(book.book_id)}>Review</button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>TBR currently empty</p>
+            )}
             <h2>Reviews</h2>
             {reviews.length > 0 ? (
                 <ul>
                     {reviews.map(review => (
-                        <li key={review.id}>
+                        <li key={review.id} className="review-card">
                             <p>{review.book_title}</p>
                             <p>{review.rating} stars</p>
                             <p>{review.review_text}</p>
+                            <button className="edit-button" onClick={() => handleEdit(review.id)}>Edit</button>
                         </li>
                     ))}
                 </ul>

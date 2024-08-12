@@ -189,6 +189,32 @@ def login():
             return make_response({'message': 'Invalid credentials'}, 401)
     except Exception as e:
         return make_response({'message': 'Login failed', 'error': str(e)}, 500)
+    
+@app.route('/reviews/<int:review_id>', methods=['GET', 'PATCH'])
+@login_required
+def handle_review(review_id):
+    review = Review.query.get_or_404(review_id)
+
+    if review.user_id != current_user.id:
+        return make_response({"message": "Unauthorized"}, 403)
+
+    if request.method == 'GET':
+        # Return the serialized review for editing
+        return make_response(review.serialize(), 200)
+
+    if request.method == 'PATCH':
+        data = request.get_json()
+        try:
+            if 'rating' in data:
+                review.rating = data['rating']
+            if 'review_text' in data:
+                review.review_text = data['review_text']
+
+            db.session.commit()
+            return make_response(review.serialize(), 200)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'message': 'Failed to update review', 'error': str(e)}, 400)
 
 @app.route('/logout', methods=['GET'])
 @login_required

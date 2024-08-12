@@ -7,6 +7,7 @@ import Signup from './Signup';
 import BookIndex from './BookIndex';
 import Home from './Home';
 import ReviewForm from './ReviewForm';
+import EditReview from './EditReview';
 
 const App = () => {
     return (
@@ -18,8 +19,9 @@ const App = () => {
                     <Route path="/signup" component={Signup} />
                     <Route path="/BookIndex" component={BookIndex} />
                     <Route path="/review/:bookId" component={ReviewForm} />
+                    <Route path="/edit-review/:reviewId" component={EditReview} />
                     <Route path="/" component={Home} />
-                    {/* Add more routes here */}
+                    
                 </Switch>
             </Router>
         </AuthProvider>

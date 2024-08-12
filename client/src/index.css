@@ -116,6 +116,7 @@
   font-size: 14px; /* Font size */
   width: 100%; /* Button takes the full width of the card */
   text-align: center; /* Center text in the button */
+  margin-top: 0.25rem;
 }
 
 .tbr-button:hover {
